@@ -19,7 +19,9 @@
                                                 {{ $outfit->getMaster->name }}
                                                 {{ $outfit->getMaster->surname }}
                                             </small>
-                                            {{ $outfit->about }}
+                                            <div>
+                                            {!! $outfit->about !!}
+                                            </div>
                                         </div>
                                         <div class="list-block__buttons">
                                             <a href="{{ route('outfit.edit', $outfit) }}" class="btn btn-info">Edit</a>

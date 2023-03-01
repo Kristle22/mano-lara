@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Master;
 use App\Http\Requests\StoreMasterRequest;
 use App\Http\Requests\UpdateMasterRequest;
+use Validator;
 
 class MasterController extends Controller
 {
@@ -37,11 +38,25 @@ class MasterController extends Controller
      */
     public function store(StoreMasterRequest $request)
     {
+         $validator = Validator::make($request->all(),
+       [
+           'master_name' => ['required', 'min:3', 'max:64'],
+           'master_surname' => ['required', 'min:3', 'max:64'],
+       ],
+[
+'master_surname.min' => 'Surname must consists at least of 2 characters.'
+]
+       );
+       if ($validator->fails()) {
+           $request->flash();
+           return redirect()->back()->withErrors($validator);
+       }
         $master = new Master;
         $master->name = $request->master_name;
         $master->surname = $request->master_surname;
         $master->save();
-        return redirect()->route('master.index');
+        return redirect()->route('master.index')->with('success_message', 'New master has arrived!');
+
         
     }
 
@@ -76,10 +91,24 @@ class MasterController extends Controller
      */
     public function update(UpdateMasterRequest $request, Master $master)
     {
+        $validator = Validator::make($request->all(),
+        [
+            'master_name' => ['required', 'min:3', 'max:64'],
+            'master_surname' => ['required', 'min:3', 'max:64'],
+        ],
+ [
+ 'master_surname.min' => 'Surname must consists at least of 2 characters.'
+ ]
+        );
+        if ($validator->fails()) {
+            $request->flash();
+            return redirect()->back()->withErrors($validator);
+        }
+
         $master->name = $request->master_name;
         $master->surname = $request->master_surname;
         $master->save();
-        return redirect()->route('master.index');
+        return redirect()->route('master.index')->with('success_message', 'The master has been updated.');
     }
 
     /**
@@ -91,9 +120,9 @@ class MasterController extends Controller
     public function destroy(Master $master)
     {
         if($master->getOutfits->count()){
-            return 'Trinti negalima, nes turi drabuziu!';
+            return redirect()->back()->with('info_message', 'Nope! You can\'t delete this master, cause he has some outfits.');
         }
         $master->delete();
-        return redirect()->route('master.index');
+        return redirect()->route('master.index')->with('success_message', 'The master has gone.');
     }
 }

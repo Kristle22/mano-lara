@@ -6,6 +6,7 @@ use App\Models\Outfit;
 use App\Models\Master;
 use App\Http\Requests\StoreOutfitRequest;
 use App\Http\Requests\UpdateOutfitRequest;
+use Validator;
 
 class OutfitController extends Controller
 {
@@ -39,6 +40,22 @@ class OutfitController extends Controller
      */
     public function store(StoreOutfitRequest $request)
     {
+        $validator = Validator::make($request->all(),
+        [
+            'outfit_type' => ['required', 'min:3', 'max:50'],
+            'outfit_color' => ['required', 'min:3', 'max:20'],
+            'outfit_size' => ['required', 'integer', 'min:5', 'max:22'],
+            'outfit_about' => ['required'],
+            'master_id' => ['required', 'integer', 'min:1'],
+        ],
+ [
+ 'outfit_surname.min' => 'Surname must consists at least of 2 characters.'
+ ]
+        );
+        if ($validator->fails()) {
+            $request->flash();
+            return redirect()->back()->withErrors($validator);
+        }
         $outfit = new Outfit;
         $outfit->type = $request->outfit_type;
         $outfit->color = $request->outfit_color;
@@ -46,7 +63,7 @@ class OutfitController extends Controller
         $outfit->about = $request->outfit_about;
         $outfit->master_id = $request->master_id;
         $outfit->save();
-        return redirect()->route('outfit.index');
+        return redirect()->route('outfit.index')->with('success_message', 'New outfit has been created.');
     }
 
     /**
@@ -81,13 +98,29 @@ class OutfitController extends Controller
      */
     public function update(UpdateOutfitRequest $request, Outfit $outfit)
     {
+        $validator = Validator::make($request->all(),
+        [
+            'outfit_type' => ['required', 'min:3', 'max:50'],
+            'outfit_color' => ['required', 'min:3', 'max:20'],
+            'outfit_size' => ['required', 'integer', 'min:5', 'max:22'],
+            'outfit_about' => ['required'],
+            'master_id' => ['required', 'integer', 'min:1'],
+        ],
+ [
+ 'outfit_surname.min' => 'Surname must consists at least of 2 characters.'
+ ]
+        );
+        if ($validator->fails()) {
+            $request->flash();
+            return redirect()->back()->withErrors($validator);
+        }
         $outfit->type = $request->outfit_type;
         $outfit->color = $request->outfit_color;
         $outfit->size = $request->outfit_size;
         $outfit->about = $request->outfit_about;
         $outfit->master_id = $request->master_id;
         $outfit->save();
-        return redirect()->route('outfit.index');
+        return redirect()->route('outfit.index')->with('success_message', 'The outfit has been updated.');
     }
 
     /**
@@ -99,6 +132,6 @@ class OutfitController extends Controller
     public function destroy(Outfit $outfit)
     {
         $outfit->delete();
-        return redirect()->route('outfit.index');
+        return redirect()->route('outfit.index')->with('success_message', 'The outfit has been deleted.');
     }
 }
