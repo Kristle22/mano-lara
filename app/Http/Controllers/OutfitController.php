@@ -28,7 +28,7 @@ class OutfitController extends Controller
      */
     public function create()
     {
-        $masters = Master::all();
+        $masters = Master::orderBy('surname')->get();
         return view('outfit.create', ['masters' => $masters]);
     }
 
@@ -85,7 +85,7 @@ class OutfitController extends Controller
      */
     public function edit(Outfit $outfit)
     {
-        $masters = Master::all();
+        $masters = Master::orderBy('surname')->get();
         return view('outfit.edit', ['masters' => $masters], compact('outfit'));
     }
 
