@@ -1,6 +1,22 @@
 .card-header {
     color: pink;
     font-style: italic;
+    fieldset {
+        border: 1px solid blueviolet;
+        margin: 5px;
+        padding: 12px;
+        display: flex;
+        .block {
+            margin: 7px 17px;
+        }
+        legend {
+            all: unset;
+            color: blueviolet;
+            font-size: 12px;
+            padding: 6px;
+            text-align: center;
+        }
+    }
 }
 .card-body button {
     margin-top: 5px;

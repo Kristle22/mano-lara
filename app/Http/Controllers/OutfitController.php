@@ -7,6 +7,7 @@ use App\Models\Master;
 use App\Http\Requests\StoreOutfitRequest;
 use App\Http\Requests\UpdateOutfitRequest;
 use Validator;
+use Illuminate\Http\Request;
 
 class OutfitController extends Controller
 {
@@ -15,10 +16,36 @@ class OutfitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $outfits = Outfit::all();
-        return view('outfit.index', ['outfits' => $outfits]);
+        if ($request->sort) {
+            if ('type' == $request->sort && 'asc' == $request->sort_dir) {
+                $outfits = Outfit::orderBy('type')->get();
+            }
+            else if ('type' == $request->sort && 'desc' == $request->sort_dir) {
+                $outfits = Outfit::orderBy('type', 'desc')->get();
+            }
+            else if ('color' == $request->sort && 'asc' == $request->sort_dir) {
+                $outfits = Outfit::orderBy('color')->get();
+            }
+            else if ('color' == $request->sort && 'desc' == $request->sort_dir) {
+                $outfits = Outfit::orderBy('color', 'desc')->get();
+            }
+            else if ('size' == $request->sort && 'asc' == $request->sort_dir) {
+                $outfits = Outfit::orderBy('size')->get();
+            }
+            else if ('size' == $request->sort && 'desc' == $request->sort_dir) {
+                $outfits = Outfit::orderBy('size', 'desc')->get();
+            }
+            else {
+                $outfits = Outfit::all();  
+            }
+        } else{
+            // nieko nesortinam
+            $outfits = Outfit::all();
+        }
+
+        return view('outfit.index', ['outfits' => $outfits, 'sortDirection' => $request->sort_dir ?? 'asc']);
     }
 
     /**
@@ -49,7 +76,7 @@ class OutfitController extends Controller
             'master_id' => ['required', 'integer', 'min:1'],
         ],
  [
- 'outfit_surname.min' => 'Surname must consists at least of 2 characters.'
+ 'outfit_size.min' => 'Outfit size begins from number 5.'
  ]
         );
         if ($validator->fails()) {
@@ -132,6 +159,6 @@ class OutfitController extends Controller
     public function destroy(Outfit $outfit)
     {
         $outfit->delete();
-        return redirect()->route('outfit.index')->with('success_message', 'The outfit has been deleted.');
+        return redirect()->route('outfit.index')->with('success_message', 'The outfit has been deleated.');
     }
 }

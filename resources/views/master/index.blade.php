@@ -39,5 +39,5 @@
 @endsection
 
 @section('title')
-    Master list
+    Masters list
 @endsection
