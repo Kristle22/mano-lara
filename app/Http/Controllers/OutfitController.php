@@ -40,12 +40,43 @@ class OutfitController extends Controller
             else {
                 $outfits = Outfit::all();  
             }
-        } else{
+        }
+        else if ($request->filter && 'master' == $request->filter) {
+            $outfits = Outfit::where('master_id', $request->master_id)->get();
+        }
+        else if ($request->search && 'all' == $request->search) {
+
+            $words = explode(' ', $request->s);
+            // dd($words);
+            if (count($words) == 1) {
+            $outfits = Outfit::where('color', 'like', '%'.$request->s.'%')
+            ->orWhere('type', 'like', '%'.$request->s.'%')
+            ->orWhere('size', 'like', '%'.$request->s.'%')->get();
+            } else {
+                $outfits = Outfit::where(function($query) use ($words) {
+                    $query->where('color', 'like', '%'.$words[0].'%')
+                    ->orWhere('type', 'like', '%'.$words[0].'%')
+                    ->orWhere('size', 'like', '%'.$words[0].'%');
+                    })
+                ->where(function($query) use ($words) {
+                $query->where('color', 'like', '%'.$words[1].'%')
+                ->orWhere('type', 'like', '%'.$words[1].'%')
+                ->orWhere('size', 'like', '%'.$words[1].'%');
+                })->get();
+            }
+        }
+        else{
             // nieko nesortinam
             $outfits = Outfit::all();
         }
-
-        return view('outfit.index', ['outfits' => $outfits, 'sortDirection' => $request->sort_dir ?? 'asc']);
+        $masters = Master::all();
+        return view('outfit.index', [
+            'outfits' => $outfits, 
+            'sortDirection' => $request->sort_dir ?? 'asc', 
+            'masters' => $masters, 
+            'masterId' => $request->master_id ?? '0', 
+            's' => $request->s ?? ''
+        ]);
     }
 
     /**

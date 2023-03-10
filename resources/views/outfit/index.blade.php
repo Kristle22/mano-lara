@@ -36,6 +36,45 @@
                                 </div>
                             </fieldset>
                         </form>
+
+                        <form action="{{ route('outfit.index') }}" method="get">
+                            <fieldset>
+                                <legend>Filter</legend>
+                                <div class="form-group">
+                                    <select class="form-control" name="master_id">
+                                        <option value="0" disabled selected>Select Master</option>
+                                        @foreach ($masters as $master)
+                                            <option value="{{ $master->id }}"
+                                                @if ($masterId == $master->id) selected @endif>{{ $master->name }}
+                                                {{ $master->surname }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <small class="form-text text-muted">Select the master from the list.</small>
+                                </div>
+                                <div class="block">
+                                    <button type="submit" class="btn btn-info" name="filter"
+                                        value="master">Filter</button>
+                                    <a href="{{ route('outfit.index') }}" class="btn btn-warning">Reset</a>
+                                </div>
+                            </fieldset>
+                        </form>
+                        <form action="{{ route('outfit.index') }}" method="get">
+                            <fieldset>
+                                <legend>Search</legend>
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="s" value="{{ $s }}"
+                                        placeholder="Search">
+                                    <small class="form-text text-muted">Search in our Fashion House.</small>
+                                </div>
+                                <div class="block">
+                                    <button type="submit" class="btn btn-info" name="search"
+                                        value="all">Search</button>
+                                    <a href="{{ route('outfit.index') }}" class="btn btn-warning">Reset</a>
+                                </div>
+                            </fieldset>
+                        </form>
+
                     </div>
                     <div class="card-body">
                         <ul class="list-group">
@@ -43,7 +82,8 @@
                                 <li class="list-group-item">
                                     <div class="list-block">
                                         <div class="list-block__content">
-                                            <span><b>{{ $outfit->type }}</b> <i>Color:</i> {{ $outfit->color }} <i>Size:</i>
+                                            <span><b>{{ $outfit->type }}</b> <i>Color:</i> {{ $outfit->color }}
+                                                <i>Size:</i>
                                                 {{ $outfit->size }}
                                             </span>
                                             <small>
