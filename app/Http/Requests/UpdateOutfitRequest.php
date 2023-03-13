@@ -14,8 +14,8 @@ class UpdateOutfitRequest extends FormRequest
      */
     public function authorize()
     {
-        // return Request::user();
-        return true;
+        return Request::user();
+        // return true;
     }
 
     /**

@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 
 class OutfitController extends Controller
 {
+    const RESULTS_IN_PAGE = 9;
+
     /**
      * Display a listing of the resource.
      *
@@ -18,31 +20,33 @@ class OutfitController extends Controller
      */
     public function index(Request $request)
     {
+        $masters = Master::paginate(self::RESULTS_IN_PAGE)->withQueryString();
+
         if ($request->sort) {
             if ('type' == $request->sort && 'asc' == $request->sort_dir) {
-                $outfits = Outfit::orderBy('type')->get();
+                $outfits = Outfit::orderBy('type')->paginate(self::RESULTS_IN_PAGE)->withQueryString();
             }
             else if ('type' == $request->sort && 'desc' == $request->sort_dir) {
-                $outfits = Outfit::orderBy('type', 'desc')->get();
+                $outfits = Outfit::orderBy('type', 'desc')->paginate(self::RESULTS_IN_PAGE)->withQueryString();
             }
             else if ('color' == $request->sort && 'asc' == $request->sort_dir) {
-                $outfits = Outfit::orderBy('color')->get();
+                $outfits = Outfit::orderBy('color')->paginate(self::RESULTS_IN_PAGE)->withQueryString();
             }
             else if ('color' == $request->sort && 'desc' == $request->sort_dir) {
-                $outfits = Outfit::orderBy('color', 'desc')->get();
+                $outfits = Outfit::orderBy('color', 'desc')->paginate(self::RESULTS_IN_PAGE)->withQueryString();
             }
             else if ('size' == $request->sort && 'asc' == $request->sort_dir) {
-                $outfits = Outfit::orderBy('size')->get();
+                $outfits = Outfit::orderBy('size')->paginate(self::RESULTS_IN_PAGE)->withQueryString();
             }
             else if ('size' == $request->sort && 'desc' == $request->sort_dir) {
-                $outfits = Outfit::orderBy('size', 'desc')->get();
+                $outfits = Outfit::orderBy('size', 'desc')->paginate(self::RESULTS_IN_PAGE)->withQueryString();
             }
             else {
-                $outfits = Outfit::all();  
+                $outfits = Outfit::paginate(self::RESULTS_IN_PAGE)->withQueryString();  
             }
         }
         else if ($request->filter && 'master' == $request->filter) {
-            $outfits = Outfit::where('master_id', $request->master_id)->get();
+            $outfits = Outfit::where('master_id', $request->master_id)->paginate(self::RESULTS_IN_PAGE)->withQueryString();
         }
         else if ($request->search && 'all' == $request->search) {
 
@@ -51,7 +55,7 @@ class OutfitController extends Controller
             if (count($words) == 1) {
             $outfits = Outfit::where('color', 'like', '%'.$request->s.'%')
             ->orWhere('type', 'like', '%'.$request->s.'%')
-            ->orWhere('size', 'like', '%'.$request->s.'%')->get();
+            ->orWhere('size', 'like', '%'.$request->s.'%')->paginate(self::RESULTS_IN_PAGE)->withQueryString();
             } else {
                 $outfits = Outfit::where(function($query) use ($words) {
                     $query->where('color', 'like', '%'.$words[0].'%')
@@ -62,14 +66,14 @@ class OutfitController extends Controller
                 $query->where('color', 'like', '%'.$words[1].'%')
                 ->orWhere('type', 'like', '%'.$words[1].'%')
                 ->orWhere('size', 'like', '%'.$words[1].'%');
-                })->get();
+                })->paginate(self::RESULTS_IN_PAGE)->withQueryString();
             }
         }
         else{
             // nieko nesortinam
-            $outfits = Outfit::all();
+            $outfits = Outfit::paginate(self::RESULTS_IN_PAGE)->withQueryString();
         }
-        $masters = Master::all();
+       
         return view('outfit.index', [
             'outfits' => $outfits, 
             'sortDirection' => $request->sort_dir ?? 'asc', 
@@ -86,7 +90,7 @@ class OutfitController extends Controller
      */
     public function create()
     {
-        $masters = Master::orderBy('surname')->get();
+        $masters = Master::orderBy('surname')->paginate(self::RESULTS_IN_PAGE)->withQueryString();
         return view('outfit.create', ['masters' => $masters]);
     }
 
@@ -132,7 +136,7 @@ class OutfitController extends Controller
      */
     public function show(Outfit $outfit)
     {
-        //
+        return view('outfit.show', compact('outfit'));
     }
 
     /**
@@ -143,7 +147,7 @@ class OutfitController extends Controller
      */
     public function edit(Outfit $outfit)
     {
-        $masters = Master::orderBy('surname')->get();
+        $masters = Master::orderBy('surname')->paginate(self::RESULTS_IN_PAGE)->withQueryString();
         return view('outfit.edit', ['masters' => $masters], compact('outfit'));
     }
 
