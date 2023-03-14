@@ -8,6 +8,7 @@ use App\Http\Requests\StoreOutfitRequest;
 use App\Http\Requests\UpdateOutfitRequest;
 use Validator;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OutfitController extends Controller
 {
@@ -195,5 +196,10 @@ class OutfitController extends Controller
     {
         $outfit->delete();
         return redirect()->route('outfit.index')->with('success_message', 'The outfit has been deleated.');
+    }
+
+    public function pdf(Outfit $outfit) {
+        $pdf = Pdf::loadView('outfit.pdf', compact('outfit'));
+        return $pdf->download(ucfirst($outfit->color).'-'.$outfit->type.'.pdf');
     }
 }

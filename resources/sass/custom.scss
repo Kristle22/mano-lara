@@ -20,6 +20,12 @@
     margin-top: 5px;
     float: right;
 }
+.card-body a {
+    margin-right: 5px;
+}
+.btn:hover {
+    color: white;
+}
 .list-block {
     display: flex;
     justify-content: space-between;
@@ -48,6 +54,12 @@
             transform: rotate(-1.5deg);
         }
     }
+}
+.pagination {
+    flex-wrap: wrap;
+}
+.pagination li {
+    margin-bottom: 3px;
 }
 
 .outfit-container {

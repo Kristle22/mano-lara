@@ -20,6 +20,7 @@
                             {!! $outfit->about !!}
                         </div>
                         <a href="{{ route('outfit.edit', $outfit) }}" class="btn btn-info mt-2">Edit</a>
+                        <a href="{{ route('outfit.pdf', $outfit) }}" class="btn btn-info mt-2">PDF</a>
                     </div>
                 </div>
             </div>
