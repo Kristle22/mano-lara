@@ -41,7 +41,7 @@
                                     @endif
                                 </div>
                                 <div class="mb-2">
-                                    <input type="checkbox" class="form-check-input mr-8" name="outfit_photo_deleted"
+                                    <input type="checkbox" class="form-check-input" name="outfit_photo_deleted"
                                         id="df">
                                     <label for="df">Delete
                                         photo</label>

@@ -17,6 +17,10 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
+    <script>
+        const apiUrl = '{{ route('master-js.index') }}';
+    </script>
+
     <!-- include libraries(jQuery, bootstrap) -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet">
@@ -68,6 +72,20 @@
                             @endif
                         @else
                             <!-- DROPDOWN NAV CODE -->
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    Masters JS
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('master-js.index') }}#list">
+                                        Masters JS List
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('master-js.index') }}#create">
+                                        New Master JS
+                                    </a>
+                                </div>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

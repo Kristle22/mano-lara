@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\OutfitController;
+use App\Http\Controllers\MasterJsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,12 @@ Route::group(['prefix' => 'masters'], function(){
     Route::get('show/{outfit}', [OutfitController::class, 'show'])->name('outfit.show');
 
     Route::get('pdf/{outfit}', [OutfitController::class, 'pdf'])->name('outfit.pdf');
+ });
+
+ Route::group(['prefix' => 'masters-js'], function(){
+    Route::get('', [MasterJsController::class, 'index'])->name('master-js.index');
+    Route::get('list', [MasterJsController::class, 'list'])->name('master-js.list');
+    Route::get('create', [MasterJsController::class, 'create'])->name('master-js.create');
  });
  
  

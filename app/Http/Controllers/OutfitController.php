@@ -133,7 +133,8 @@ class OutfitController extends Controller
             $destinationPath = public_path().'/outfits-images/';
             $file->move($destinationPath, $name);
             $outfit->photo = asset('/outfits-images/'.$name);
-
+            
+            // image intervention
             $img = Image::make($destinationPath.$name);
             $img->gamma(5.6)->flip('v');
             $img->save($destinationPath.$name);

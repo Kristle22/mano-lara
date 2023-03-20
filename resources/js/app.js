@@ -49,3 +49,59 @@ import './bootstrap';
 $(document).ready(function () {
   $('[name=outfit_about]').summernote();
 });
+
+// Masters JS rendering
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.querySelector('#root')) {
+    const url = apiUrl + '/list';
+    request(url);
+  }
+});
+
+const request = (url) => {
+  const root = document.querySelector('#root');
+  axios.get(url, {})
+    .then(function (response) {
+      root.innerHTML = response.data.html;
+      hydrationPagination(root);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
+
+window.addEventListener("hashchange", () => {
+  const url = apiUrl + '/' + location.hash.substr(1);
+  request(url);
+});
+
+const postRequest = (url, data) => {
+  axios.post(url, data)
+    .then(function (response) {
+      window.location.hash = response.data.hash;
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
+
+const hydrationPagination = node => {
+  node.querySelectorAll('a.page-link').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const url = e.target.getAttribute('href');
+      request(url);
+    })
+  })
+  node.querySelectorAll('button.btn').forEach(b => {
+    b.addEventListener('click', () => {
+      const form = b.closest('form');
+      const url = form.getAttribute('action');
+      const data = {};
+      form.querySelectorAll('[name]').forEach(i => {
+        data[i.getAttribute('name')] = i.value;
+      })
+      postRequest(url, data);
+    })
+  })
+}
