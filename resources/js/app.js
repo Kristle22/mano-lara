@@ -58,6 +58,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+window.addEventListener("hashchange", () => {
+  getHash();
+});
+
+const getHash = () => {
+  const url = apiUrl + '/' + location.hash.substr(1).replace('|', '/');
+  request(url);
+}
+
 const request = (url) => {
   const root = document.querySelector('#root');
   axios.get(url, {})
@@ -70,15 +79,15 @@ const request = (url) => {
     });
 }
 
-window.addEventListener("hashchange", () => {
-  const url = apiUrl + '/' + location.hash.substr(1);
-  request(url);
-});
-
 const postRequest = (url, data) => {
   axios.post(url, data)
     .then(function (response) {
-      window.location.hash = response.data.hash;
+      if (location.hash.substr(1) == response.data.hash) {
+        getHash();
+      }
+      else {
+        window.location.hash = response.data.hash;
+      }
     })
     .catch(function (error) {
       console.log(error);
