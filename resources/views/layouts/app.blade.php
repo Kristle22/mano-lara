@@ -171,6 +171,8 @@
                 </div>
             </div>
         </div>
+        <div class="container id" id="msg">
+        </div>
         <main class="py-4">
             @yield('content')
         </main>

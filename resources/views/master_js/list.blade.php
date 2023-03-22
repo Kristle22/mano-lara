@@ -15,7 +15,8 @@
                         @endif
                     </div>
                     <div class="list-block__buttons">
-                        <a href="{{ route('master-js.index') }}#edit|{{ $master->id }}" class="btn btn-info">Edit</a>
+                        <a href="{{ route('master-js.index') }}#edit|{{ $master->id }}"
+                            class="btn btn-info link-btn">Edit</a>
                         <form method="POST" action="{{ route('master-js.destroy', $master) }}">
                             <button type="button" class="btn btn-danger">Delete</button>
                             @csrf

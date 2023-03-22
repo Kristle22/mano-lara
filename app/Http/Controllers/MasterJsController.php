@@ -40,9 +40,12 @@ class MasterJsController extends Controller
         $master->name = $request->master_name;
         $master->surname = $request->master_surname;
         $master->save();
+        
+        $msgHtml = view('master_js.messages', ['successMsg' => 'Valio, naujas meistras sėkmingai atvyko!'])->render(); 
 
         return response()->json([
-            'hash' => 'list'
+            'hash' => 'list',
+            'msg' => $msgHtml
         ]); 
     }
 
@@ -66,10 +69,20 @@ class MasterJsController extends Controller
 
     public function destroy(Master $master)
     {
+        if($master->getOutfits->count()){
+            $msgHtml = view('master_js.messages', ['infoMsg' => 'Nope! Šio meistro ištrinti negalima, nes jis turi užsakymų.'])->render();
+
+            return response()->json([
+                'msg' => $msgHtml
+            ]);
+        }
         $master->delete();
 
+        $msgHtml = view('master_js.messages', ['successMsg' => 'Meistras sėkmingai ištrintas.'])->render();
+
         return response()->json([
-            'hash' => 'list'
+            'hash' => 'list',
+            'msg' => $msgHtml
         ]);
     }
 }
